@@ -41,7 +41,8 @@ class GalileoBroadcast:
 
 
 class NequickG:
-    def __init__(self, parameters):
+    def __init__(self, parameters, disturbance_flag=False):
+        self.disturbance_flag = disturbance_flag
         # self.Para = parameters
         self.hmF2 = parameters.hmF2
         topside_para = parameters.topside_para()
@@ -68,6 +69,8 @@ class NequickG:
         N[mask1] = self.bottomside.electrondensity(h_bot)
         N[mask2] = self.topside.electrondensity(h_top)
 
+        if self.disturbance_flag:
+            N *= 1.2
         assert (not np.any(N < 0))
 
         return N
@@ -103,7 +106,7 @@ class NequickG:
             count += 1
 
         if count == 20:
-            print "vTEC integration did not converge"
+            print("vTEC integration did not converge")
 
         return (GN2 + (GN2 - GN1) / 15.0)
 
@@ -454,7 +457,7 @@ class NequickG_parameters:
         #
         # print foE - self.foE
         if (self.foE < 0):
-            print self.foE
+            print(self.foE)
         assert(self.foE >= 0)
         return self.foE, self.NmE
 
